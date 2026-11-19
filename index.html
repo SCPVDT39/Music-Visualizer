@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Music Visualizer</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+    <main class="container">
+
+        <!-- モード選択 -->
+        <section class="mode-settings">
+
+            <label for="visualizerMode">
+                VISUALIZER MODE
+            </label>
+
+            <select id="visualizerMode">
+                <option value="normal" selected>Normal Mode</option>
+                <option value="fnf">FNF Mode</option>
+            </select>
+
+        </section>
+
+        <header class="header">
+            <h1>Music Visualizer</h1>
+            <p>音楽を視覚的に楽しもう。</p>
+        </header>
+
+        <section class="visualizer-section">
+            <canvas id="visualizer"></canvas>
+        </section>
+
+        <section class="visualizer-controls">
+            <label for="visualizerStyle">VISUALIZER STYLE</label>
+
+            <select id="visualizerStyle">
+                <option value="bar">Bar</option>
+                <option value="wave">Wave</option>
+                <option value="circular">Circular</option>
+                <option value="mirror">Mirror</option>
+            </select>
+        </section>
+
+        <section class="color-settings">
+
+            <h2>COLOR SETTINGS</h2>
+
+            <div class="color-inputs" id="colorInputs"></div>
+
+            <div class="gradient-settings">
+
+                <label for="gradientCount">
+                    グラデーションカラー数
+                </label>
+
+                <select id="gradientCount">
+                    <option value="2">2色</option>
+                    <option value="3">3色</option>
+                    <option value="4">4色</option>
+                    <option value="5" selected>5色</option>
+                    <option value="6">6色</option>
+                    <option value="7">7色</option>
+                    <option value="8">8色</option>
+                    <option value="9">9色</option>
+                    <option value="10">10色</option>
+                    <option value="11">11色</option>
+                    <option value="12">12色</option>
+                    <option value="13">13色</option>
+                    <option value="14">14色</option>
+                    <option value="15">15色</option>
+                    <option value="16">16色</option>
+                    <option value="17">17色</option>
+                    <option value="18">18色</option>
+                    <option value="19">19色</option>
+                    <option value="20">20色</option>
+                    <option value="21">21色</option>
+                </select>
+
+            </div>
+
+            <div class="gradient-preview" id="gradientPreview"></div>
+
+        </section>
+
+        <section class="player-section">
+
+            <input type="file" id="audioFile" accept="audio/*,.mpeg,.mpg,.mp3,.mp4,.ogg">
+
+            <div class="track-info">
+                <p id="trackName">No Music Selected</p>
+            </div>
+
+            <audio id="audioPlayer" controls></audio>
+
+            <div class="audio-settings">
+
+                <label>
+                    音量
+                    <input type="range" id="volumeControl"
+                        min="0" max="1" step="0.01" value="1">
+                </label>
+
+                <label>
+                    再生速度
+                    <select id="speedControl">
+                        <option value="0.5">0.5x</option>
+                        <option value="0.75">0.75x</option>
+                        <option value="1" selected>1.0x</option>
+                        <option value="1.25">1.25x</option>
+                        <option value="1.5">1.5x</option>
+                        <option value="1.75">1.75x</option>
+                        <option value="2">2.0x</option>
+                    </select>
+                </label>
+
+                <button id="muteButton">MUTE</button>
+
+            </div>
+
+        </section>
+
+        <!-- FNF MODE -->
+        <section class="fnf-section" id="fnfSection" hidden>
+
+            <h2>FNF MODE</h2>
+
+            <!-- 音源設定 -->
+            <div class="fnf-audio-settings">
+
+                <div class="fnf-audio-item">
+                    <h3>INST</h3>
+                    <input type="file" id="instFile" accept="audio/*">
+                    <p id="instName">No Inst Selected</p>
+                </div>
+
+                <div class="fnf-audio-item">
+                    <h3>OPPONENT</h3>
+                    <input type="file" id="opponentFile" accept="audio/*">
+                    <p id="opponentName">No Opponent Selected</p>
+                </div>
+
+                <div class="fnf-audio-item">
+                    <h3>PLAYER</h3>
+                    <input type="file" id="playerFile" accept="audio/*">
+                    <p id="playerName">No Player Selected</p>
+                </div>
+
+            </div>
+
+            <!-- FNF PLAYBACK CONTROLS -->
+            <div class="fnf-playback-controls">
+                <button id="fnfPlayButton">▶ PLAY</button>
+                <button id="fnfPauseButton">Ⅱ PAUSE</button>
+                <button id="fnfStopButton">■ STOP</button>
+            </div>
+
+            <!-- FNF TIMELINE -->
+            <div class="fnf-timeline">
+                <span id="fnfCurrentTime">00:00</span>
+
+                <input
+                    type="range"
+                    id="fnfSeekBar"
+                    min="0"
+                    max="100"
+                    value="0"
+                    step="0.1"
+                >
+
+                <span id="fnfDuration">00:00</span>
+            </div>
+
+            <!-- FNFビジュアライザー -->
+            <div class="fnf-visualizer">
+
+                <div class="fnf-inst-visualizer">
+                    <h3>INST</h3>
+                    <canvas id="instCanvas"></canvas>
+                </div>
+
+                <div class="fnf-vocal-visualizers">
+
+                    <div class="fnf-opponent-visualizer">
+                        <h3>OPPONENT</h3>
+                        <canvas id="opponentCanvas"></canvas>
+                    </div>
+
+                    <div class="fnf-player-visualizer">
+                        <h3>PLAYER</h3>
+                        <canvas id="playerCanvas"></canvas>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- FNF Color Settings -->
+            <div class="fnf-color-settings">
+
+                <h3>FNF Color Settings</h3>
+
+                <div id="fnfColorSettings"></div>
+
+                <button id="fnfColorReset">RESET COLORS</button>
+
+            </div>
+
+        </section>
+
+    </main>
+
+    <script src="js/main.js"></script>
+
+</body>
+</html>
