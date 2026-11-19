@@ -954,9 +954,25 @@ function resizeFnfCanvas(canvas) {
 function drawFnfWaveform(type, canvas, ctx) {
     const analyser = fnfAnalysers[type];
 
-    if (!analyser) return;
+if (!analyser) return;
 
     const width = canvas.clientWidth;
+    const height = canvas.clientHeight;
+
+    const data = new Uint8Array(analyser.frequencyBinCount);
+analyser.getByteFrequencyData(data);
+
+// デバッグ用：取得した音量データの最大値
+const maxValue = Math.max(...data);
+
+console.log(
+    type,
+    "音量データ:",
+    maxValue,
+    "Canvas:",
+    width,
+    height
+);
     const height = canvas.clientHeight;
 
     const data = new Uint8Array(analyser.frequencyBinCount);
