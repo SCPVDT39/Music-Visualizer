@@ -131,6 +131,7 @@ function waitForAudioReady(audio) {
 
 // PLAY
 fnfPlayButton.addEventListener("click", async () => {
+
     // 3つすべて読み込まれているか確認
     if (fnfAudioList.some(audio => !audio.src)) {
         alert("INST・OPPONENT・PLAYERの3つの音源を読み込んでください。");
@@ -138,38 +139,21 @@ fnfPlayButton.addEventListener("click", async () => {
     }
 
     try {
-        try {
-        // すべての音源の準備を待つ
-        await Promise.all(fnfAudioList.map(waitForAudioReady));
-
-        // 再生が終了している音源は先頭に戻す
-        fnfAudioList.forEach(audio => {
-            if (audio.ended) {
-                audio.currentTime = 0;
-            }
-        });
-
-        // 3音源のAnalyserを初期化
+        // Analyserを初期化
         setupFnfAnalyser("inst");
         setupFnfAnalyser("opponent");
         setupFnfAnalyser("player");
 
-        // AudioContextを再開
-        await fnfAudioContext.resume();
+        // AudioContextをユーザー操作中に再開
+        const resumePromise = fnfAudioContext.resume();
 
-        // 3つを同時に再生
-        await Promise.all(
-            fnfAudioList.map(audio => audio.play())
-        );
+        // 音源の準備を待つ
+        await Promise.all([
+            ...fnfAudioList.map(waitForAudioReady),
+            resumePromise
+        ]);
 
-    } catch (error) {
-        console.error("FNF再生エラー:", error);
-        alert("音源の再生に失敗しました。ファイルを確認してください。");
-    }
-        // すべての音源の準備を待つ
-        await Promise.all(fnfAudioList.map(waitForAudioReady));
-
-        // 再生が終了している音源は先頭に戻す
+        // 終了済みの音源を先頭に戻す
         fnfAudioList.forEach(audio => {
             if (audio.ended) {
                 audio.currentTime = 0;
@@ -185,6 +169,7 @@ fnfPlayButton.addEventListener("click", async () => {
         console.error("FNF再生エラー:", error);
         alert("音源の再生に失敗しました。ファイルを確認してください。");
     }
+
 });
 
 // PAUSE
