@@ -963,8 +963,12 @@ function drawFnfWaveform(type, canvas, ctx) {
             i * data.length / barCount
         );
 
+        // 音声データを増幅
         const value = data[dataIndex];
-        const barHeight = (value / 255) * height * 0.85;
+        const amplifiedValue = Math.min(value * 2.5, 255);
+
+        // バーの高さ
+        const barHeight = (amplifiedValue / 255) * height * 0.95;
 
         const x = i * (barWidth + gap);
         const y = height - barHeight;
@@ -975,11 +979,11 @@ function drawFnfWaveform(type, canvas, ctx) {
         );
 
         ctx.fillStyle = color;
-        ctx.shadowBlur = 10;
+        ctx.shadowBlur = 3;
         ctx.shadowColor = color;
 
         ctx.fillRect(x, y, barWidth, barHeight);
-    }
+        }
 
     ctx.shadowBlur = 0;
 }
