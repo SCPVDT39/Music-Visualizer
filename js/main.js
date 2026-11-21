@@ -963,12 +963,11 @@ function drawFnfWaveform(type, canvas, ctx) {
             i * data.length / barCount
         );
 
-        // 音声データを増幅
+        // 音声データ
         const value = data[dataIndex];
-        const amplifiedValue = Math.min(value * 2.5, 255);
-
+        
         // バーの高さ
-        const barHeight = (amplifiedValue / 255) * height * 0.95;
+        const barHeight = (value / 255) * height * 0.85;
 
         const x = i * (barWidth + gap);
         const y = height - barHeight;
