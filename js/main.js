@@ -1004,3 +1004,76 @@ function animateFnfVisualizers() {
 
 // アニメーション開始
 animateFnfVisualizers();
+
+// ==============================
+// KEYBOARD SHORTCUTS
+// ==============================
+
+document.addEventListener("keydown", (event) => {
+
+    // Space以外は無視
+    if (event.code !== "Space") return;
+
+    // キーの長押しによる連続実行を防止
+    if (event.repeat) return;
+
+    // 入力欄などを操作中は無視
+    const tag = event.target.tagName;
+
+    if (
+        ["INPUT", "TEXTAREA", "SELECT", "BUTTON"].includes(tag) ||
+        event.target.isContentEditable
+    ) {
+        return;
+    }
+
+    // ページのスクロールを防止
+    event.preventDefault();
+
+    // 現在のモードを確認
+    const isFnfMode = visualizerMode.value === "fnf";
+
+    // ==============================
+    // FNF MODE
+    // ==============================
+
+    if (isFnfMode) {
+
+        // どれか1つでも再生中なら一時停止
+        const isPlaying = fnfAudioList.some(
+            audio => !audio.paused
+        );
+
+        if (isPlaying) {
+            fnfPauseButton.click();
+        } else {
+            fnfPlayButton.click();
+        }
+
+        return;
+    }
+
+    // ==============================
+    // NORMAL MODE
+    // ==============================
+
+    if (!audioPlayer.src) return;
+
+    if (audioPlayer.paused) {
+
+        // 再生終了後なら先頭に戻す
+        if (audioPlayer.ended) {
+            audioPlayer.currentTime = 0;
+        }
+
+        audioPlayer.play().catch(error => {
+            console.error("再生エラー:", error);
+        });
+
+    } else {
+
+        audioPlayer.pause();
+
+    }
+
+});
